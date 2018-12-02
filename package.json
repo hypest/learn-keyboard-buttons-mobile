@@ -1,0 +1,15 @@
+{
+  "name": "learn-keyboard-buttons",
+  "private": true,
+  "scripts": {
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios"
+  },
+  "dependencies": {
+    "metro-react-native-babel-preset": "^0.45.5",
+    "react": "16.6.1",
+    "react-native": "0.57.7"
+  },
+  "devDependencies": {}
+}
