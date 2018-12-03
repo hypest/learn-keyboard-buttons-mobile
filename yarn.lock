@@ -2893,6 +2893,10 @@ react-devtools-core@^3.4.2:
     shell-quote "^1.6.1"
     ws "^3.3.1"
 
+react-native-key-event@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-key-event/-/react-native-key-event-1.0.0.tgz#021a9a465e383db8855e3fa53cb4c4a46377bfb2"
+
 react-native@0.57.7:
   version "0.57.7"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.57.7.tgz#5b3af1c43366c41d8d8d2540fea8ce590060bca1"

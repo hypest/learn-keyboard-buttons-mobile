@@ -9,7 +9,8 @@
   "dependencies": {
     "metro-react-native-babel-preset": "^0.45.5",
     "react": "16.6.1",
-    "react-native": "0.57.7"
+    "react-native": "0.57.7",
+    "react-native-key-event": "^1.0.0"
   },
   "devDependencies": {}
 }
