@@ -1,17 +1,17 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import KeyEvent from 'react-native-key-event';
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import KeyEvent from "react-native-key-event";
 
 export default class App extends React.Component {
   componentDidMount() {
     // if you want to react to keyDown
-    KeyEvent.onKeyDownListener((keyEvent) => {
+    KeyEvent.onKeyDownListener(keyEvent => {
       console.log(`onKeyDown keyCode: ${keyEvent.keyCode}`);
       console.log(`Action: ${keyEvent.action}`);
     });
 
     // if you want to react to keyUp
-    KeyEvent.onKeyUpListener((keyEvent) => {
+    KeyEvent.onKeyUpListener(keyEvent => {
       console.log(`onKeyUp keyCode: ${keyEvent.keyCode}`);
       console.log(`Action: ${keyEvent.action}`);
       console.log(keyEvent);
@@ -22,7 +22,7 @@ export default class App extends React.Component {
     // if you are listening to keyDown
     KeyEvent.removeKeyDownListener();
 
-     // if you are listening to keyUp
+    // if you are listening to keyUp
     KeyEvent.removeKeyUpListener();
   }
 
@@ -38,8 +38,8 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
+  }
 });
