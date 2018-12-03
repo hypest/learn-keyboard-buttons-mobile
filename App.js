@@ -3,6 +3,12 @@ import { StyleSheet, Text, View } from "react-native";
 import KeyEvent from "react-native-key-event";
 
 export default class App extends React.Component {
+  constructor() {
+    super( ...arguments );
+
+    this.state = { keyDisplay: "" };
+  }
+
   componentDidMount() {
     // if you want to react to keyDown
     KeyEvent.onKeyDownListener(keyEvent => {
@@ -15,6 +21,7 @@ export default class App extends React.Component {
       console.log(`onKeyUp keyCode: ${keyEvent.keyCode}`);
       console.log(`Action: ${keyEvent.action}`);
       console.log(keyEvent);
+      this.setState({ keyDisplay: keyEvent.displayLabel });
     });
   }
 
@@ -29,7 +36,7 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
+        <Text>key: {this.state.keyDisplay}</Text>
       </View>
     );
   }
