@@ -73,8 +73,16 @@ export default class App extends React.Component {
     v: "ω"
   };
 
+  hasKey(obj, key) {
+    return obj != null && hasOwnProperty.call(obj, key);
+  }
+
   remap(letter) {
-    return this.englishToGreek[letter];
+    if (this.hasKey(this.englishToGreek, letter)) {
+      return this.englishToGreek[letter];
+    } else {
+      return "Ωχ, δεν το ξέρω...";
+    }
   }
 
   componentDidMount() {
