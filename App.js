@@ -46,6 +46,37 @@ export default class App extends React.Component {
     }
   };
 
+  englishToGreek = {
+    a: "α",
+    b: "β",
+    g: "γ",
+    d: "δ",
+    e: "ε",
+    z: "ζ",
+    h: "ήτα",
+    u: "θ",
+    i: "ι",
+    k: "κ",
+    l: "λ",
+    m: "μ",
+    n: "ν",
+    j: "ξ",
+    o: "ο",
+    p: "π",
+    r: "ρ",
+    s: "σ",
+    t: "τ",
+    y: "υ",
+    f: "φ",
+    x: "χ",
+    c: "ψ",
+    v: "ω"
+  };
+
+  remap(letter) {
+    return this.englishToGreek[letter];
+  }
+
   componentDidMount() {
     // if you want to react to keyDown
     KeyEvent.onKeyDownListener(keyEvent => {
@@ -58,7 +89,7 @@ export default class App extends React.Component {
       console.log(`onKeyUp keyCode: ${keyEvent.keyCode}`);
       console.log(`Action: ${keyEvent.action}`);
       console.log(keyEvent);
-      this.setState({ text: keyEvent.displayLabel });
+      this.setState({ text: this.remap(keyEvent.displayLabel.toLowerCase()) });
       this.readText();
     });
 
