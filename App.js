@@ -19,23 +19,23 @@ export default class App extends React.Component {
 
   initTts = async () => {
     const voices = await Tts.voices();
-    console.log(voices);
     const availableVoices = voices
       .filter(v => !v.networkConnectionRequired && !v.notInstalled)
       .filter(v => v.language.startsWith("el"))
       .map(v => {
         return { id: v.id, name: v.name, language: v.language };
       });
+    console.log(availableVoices);
     let selectedVoice = null;
-    if (voices && voices.length > 0) {
-      selectedVoice = voices[0].id;
+    if (availableVoices && availableVoices.length > 0) {
+      selectedVoice = availableVoices[0].id;
       try {
-        await Tts.setDefaultLanguage(voices[0].language);
+        await Tts.setDefaultLanguage(availableVoices[0].language);
       } catch (err) {
         // My Samsung S9 has always this error: "Language is not supported"
         console.log(`setDefaultLanguage error `, err);
       }
-      await Tts.setDefaultVoice(voices[0].id);
+      await Tts.setDefaultVoice(availableVoices[0].id);
       this.setState({
         voices: availableVoices,
         selectedVoice,
