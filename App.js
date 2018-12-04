@@ -97,7 +97,12 @@ export default class App extends React.Component {
       console.log(`onKeyUp keyCode: ${keyEvent.keyCode}`);
       console.log(`Action: ${keyEvent.action}`);
       console.log(keyEvent);
-      this.setState({ text: this.remap(keyEvent.displayLabel.toLowerCase()) });
+
+      const isNum = /^\d+$/.test(keyEvent.displayLabel);
+      const toSay = isNum
+        ? keyEvent.displayLabel
+        : this.remap(keyEvent.displayLabel.toLowerCase());
+      this.setState({ text: toSay });
       this.readText();
     });
 
