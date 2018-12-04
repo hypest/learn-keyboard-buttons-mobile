@@ -1,13 +1,50 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, Button, StyleSheet, Text, View } from "react-native";
 import KeyEvent from "react-native-key-event";
+import Tts from "react-native-tts";
 
 export default class App extends React.Component {
   constructor() {
-    super( ...arguments );
+    super(...arguments);
 
-    this.state = { keyDisplay: "" };
+    this.state = {
+      voices: [],
+      ttsStatus: "initiliazing",
+      selectedVoice: null,
+      speechRate: 0.5,
+      speechPitch: 1,
+      text: "This is an example text"
+    };
   }
+
+  initTts = async () => {
+    const voices = await Tts.voices();
+    console.log(voices);
+    const availableVoices = voices
+      .filter(v => !v.networkConnectionRequired && !v.notInstalled)
+      .filter(v => v.language.startsWith("el"))
+      .map(v => {
+        return { id: v.id, name: v.name, language: v.language };
+      });
+    let selectedVoice = null;
+    if (voices && voices.length > 0) {
+      selectedVoice = voices[0].id;
+      try {
+        await Tts.setDefaultLanguage(voices[0].language);
+      } catch (err) {
+        // My Samsung S9 has always this error: "Language is not supported"
+        console.log(`setDefaultLanguage error `, err);
+      }
+      await Tts.setDefaultVoice(voices[0].id);
+      this.setState({
+        voices: availableVoices,
+        selectedVoice,
+        ttsStatus: "initialized"
+      });
+    } else {
+      this.setState({ ttsStatus: "initialized" });
+    }
+  };
 
   componentDidMount() {
     // if you want to react to keyDown
@@ -21,8 +58,22 @@ export default class App extends React.Component {
       console.log(`onKeyUp keyCode: ${keyEvent.keyCode}`);
       console.log(`Action: ${keyEvent.action}`);
       console.log(keyEvent);
-      this.setState({ keyDisplay: keyEvent.displayLabel });
+      this.setState({ text: keyEvent.displayLabel });
+      this.readText();
     });
+
+    Tts.addEventListener("tts-start", event =>
+      this.setState({ ttsStatus: "started" })
+    );
+    Tts.addEventListener("tts-finish", event =>
+      this.setState({ ttsStatus: "finished" })
+    );
+    Tts.addEventListener("tts-cancel", event =>
+      this.setState({ ttsStatus: "cancelled" })
+    );
+    Tts.setDefaultRate(this.state.speechRate);
+    Tts.setDefaultPitch(this.state.speechPitch);
+    Tts.getInitStatus().then(this.initTts);
   }
 
   componentWillUnmount() {
@@ -31,12 +82,46 @@ export default class App extends React.Component {
 
     // if you are listening to keyUp
     KeyEvent.removeKeyUpListener();
+
+    Tts.stop();
   }
+
+  readText = async () => {
+    Tts.stop();
+    Tts.speak(this.state.text);
+  };
+
+  onVoicePress = async voice => {
+    try {
+      await Tts.setDefaultLanguage(voice.language);
+    } catch (err) {
+      console.log(`setDefaultLanguage error `, err);
+    }
+    await Tts.setDefaultVoice(voice.id);
+    this.setState({ selectedVoice: voice.id });
+  };
+
+  renderVoiceItem = ({ item }) => {
+    return (
+      <Button
+        title={`${item.language} - ${item.name || item.id}`}
+        color={this.state.selectedVoice === item.id ? undefined : "#969696"}
+        onPress={() => this.onVoicePress(item)}
+      />
+    );
+  };
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>key: {this.state.keyDisplay}</Text>
+        <Text>key: {this.state.text}</Text>
+        <Text>TTS status: {this.state.ttsStatus}</Text>
+        <FlatList
+          keyExtractor={item => item.id}
+          renderItem={this.renderVoiceItem}
+          extraData={this.state.selectedVoice}
+          data={this.state.voices}
+        />
       </View>
     );
   }
